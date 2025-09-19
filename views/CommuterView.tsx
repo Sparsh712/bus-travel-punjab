@@ -56,7 +56,7 @@ const MapComponent: React.FC<{
     if (!mapRef.current || mapInstanceRef.current) return;
     
     // WARNING: Hardcoding API keys is not secure. This is for demonstration purposes only.
-    const apiKey = 'AIzaSyBFO4KJeePp37jfH5_W6sJSqd3len5o3Fk';
+    const apiKey = 'Your API KEY';
     if (!apiKey) {
       onLoadError();
       return;
