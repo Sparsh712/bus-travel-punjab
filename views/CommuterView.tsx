@@ -225,13 +225,13 @@ const LiveTracker: React.FC<CommuterViewProps> = ({ buses, onSelectBus }) => {
   return (
     <div className="space-y-8 animate-fade-in">
       <div>
-        <h2 className="text-3xl font-bold text-gray-800 mb-4">{t.liveMap}</h2>
+        <h2 className="text-3xl font-bold text-orange-400 mb-4">{t.liveMap}</h2>
         <div className="relative w-full h-80 bg-gray-200 rounded-xl overflow-hidden shadow-lg border-4 border-white">
           {renderMapContent()}
         </div>
       </div>
       <div>
-        <h2 className="text-3xl font-bold text-gray-800 mb-4">{t.nearbyBuses}</h2>
+        <h2 className="text-3xl font-bold text-orange-400 mb-4">{t.nearbyBuses}</h2>
         <div className="space-y-4">
           {Object.values(liveBuses).map(liveBus => {
             const currentStop = liveBus.bus.stops[liveBus.currentStopIndex];
