@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import type { BusTrip } from '../types';
 import { useAppContext } from '../hooks/useAppContext';
@@ -56,7 +55,7 @@ const MapComponent: React.FC<{
     if (!mapRef.current || mapInstanceRef.current) return;
     
     // WARNING: Hardcoding API keys is not secure. This is for demonstration purposes only.
-    const apiKey = 'Your API KEY';
+    const apiKey = 'AIzaSyBFO4KJeePp37jfH5_W6sJSqd3len5o3Fk';
     if (!apiKey) {
       onLoadError();
       return;

@@ -2,7 +2,7 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { ROUTES } from '../constants';
 import type { Route } from '../types';
 
-// FIX: Updated to use process.env.API_KEY for the Gemini API key as per project guidelines.
+const apiKey = import.meta.env.VITE_API_KEY;
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
 
 const responseSchema = {
