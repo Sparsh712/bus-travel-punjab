@@ -101,7 +101,7 @@ const RoutePlanner: React.FC = () => {
 
     return (
         <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg w-full max-w-4xl mx-auto">
-            <h2 className="text-2xl font-bold text-orange-200 dark:text-white mb-2">Find Your Route</h2>
+            <h2 className="text-2xl font-bold text-orange-400 mb-2">Find Your Route</h2>
             <p className="text-gray-500 dark:text-gray-400 mb-6">Enter your start and end points to find the best bus route.</p>
 
             <div className="flex flex-col md:flex-row items-center gap-2 mb-6">
