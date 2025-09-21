@@ -1,16 +1,14 @@
+
 import React from 'react';
 import type { Route } from '../types';
-import { BusIcon } from './icons/BusIcon';
-import { ClockIcon } from './icons/ClockIcon';
-import { MoneyIcon } from './icons/MoneyIcon';
-import { LocationMarkerIcon } from './icons/LocationMarkerIcon';
+import { BusIcon, ClockIcon, MoneyIcon, LocationMarkerIcon } from './Icons';
 
 export const RouteResultCard: React.FC<{ route: Route }> = ({ route }) => {
   return (
     <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg border border-gray-200 dark:border-gray-600 shadow-sm hover:shadow-md transition-shadow">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-3">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-orange-100 dark:bg-orange-900/50 text-orange-600 dark:text-orange-300 rounded-full flex items-center justify-center">
+          <div className="w-10 h-10 bg-orange-100 dark:bg-orange-900/50 text-orange-600 dark:text-orange-300 rounded-full flex items-center justify-center flex-shrink-0">
             <BusIcon className="w-5 h-5" />
           </div>
           <div>
@@ -18,7 +16,7 @@ export const RouteResultCard: React.FC<{ route: Route }> = ({ route }) => {
             <p className="text-sm text-gray-600 dark:text-gray-300">{route.name}</p>
           </div>
         </div>
-        <div className="flex items-center gap-6 mt-3 sm:mt-0 text-sm">
+        <div className="flex items-center gap-6 mt-3 sm:mt-0 text-sm flex-shrink-0">
           <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300" title="Estimated Time">
             <ClockIcon className="w-5 h-5" />
             <span>{route.estimatedTime} min</span>
