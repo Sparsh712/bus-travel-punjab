@@ -18,7 +18,7 @@ const LoginView: React.FC<LoginViewProps> = ({ onLogin }) => {
     <div className="flex items-center justify-center min-h-screen -m-8 bg-gradient-to-br from-green-100 to-blue-200">
       <div className="w-full max-w-sm p-8 space-y-8 bg-white rounded-2xl shadow-2xl">
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-800">{t.appName}</h1>
+          <h1 className="text-4xl font-bold text-gray-800">Safar-E-Punjab</h1>
           <p className="mt-2 text-xl text-gray-600">{t.loginTitle}</p>
         </div>
         <form className="space-y-6" onSubmit={handleSubmit}>
