@@ -18,7 +18,7 @@ const Header: React.FC<HeaderProps> = ({ onLogout, onToggleAdmin, currentView })
 
   return (
     <header className="bg-white shadow-md p-4 flex justify-between items-center sticky top-0 z-10">
-      <h1 className="text-2xl font-bold text-green-700">{t.appName}</h1>
+      <h1 className="text-2xl font-bold text-green-700">Safar-E-Punjab</h1>
       <div className="flex items-center space-x-4">
         <button
           onClick={onToggleAdmin}
