@@ -47,7 +47,7 @@ const BookingView: React.FC<BookingViewProps> = ({ bus, onProceed, onBack, selec
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-3xl font-bold text-gray-800">{t.bookingTitle}</h2>
+        <h2 className="text-3xl font-bold text-orange-400">{t.bookingTitle}</h2>
         <button onClick={onBack} className="text-lg text-blue-600 hover:underline">&larr; {t.back}</button>
       </div>
 
