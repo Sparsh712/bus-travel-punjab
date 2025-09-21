@@ -2,8 +2,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { ROUTES } from '../constants';
 import type { Route } from '../types';
 
-const apiKey = import.meta.env.VITE_API_KEY;
-
+const apiKey = "AIzaSyCqdkejgWQ088nNDLY2ae1lKk9woHVeyWc";
 // This check provides a clear error if the API key is missing.
 if (!apiKey) {
   throw new Error("VITE_API_KEY is not set. Please add it to your .env file");
@@ -116,4 +115,3 @@ export const getSmartTravelAdvice = async (query: string): Promise<{ summary: st
     };
   }
 };
-
