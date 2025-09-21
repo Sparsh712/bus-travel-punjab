@@ -14,6 +14,7 @@ export const busData: BusTrip[] = [
       { stop_name: 'Kalma Chowk', eta: 8 },
       { stop_name: 'Centre Point', eta: 15 },
       { stop_name: 'Liberty Market', eta: 20 },
+      { stop_name: 'LUMS', eta: 15 },
     ],
   },
   {
