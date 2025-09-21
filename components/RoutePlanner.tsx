@@ -1,48 +1,9 @@
+
 import React, { useState, useMemo } from 'react';
 import { ROUTES, ALL_STOPS } from '../constants';
 import type { Route } from '../types';
 import { RouteResultCard } from './RouteResultCard';
-import { LocationIcon } from './Icons';
-
-// Helper component defined outside the main component to prevent re-creation on re-renders.
-const AutocompleteInput: React.FC<{ 
-    value: string; 
-    setValue: (val: string) => void; 
-    suggestions: string[]; 
-    placeholder: string 
-}> = ({ value, setValue, suggestions, placeholder }) => {
-    // Show suggestions only if the input has text and there's more than one suggestion,
-    // or if the single suggestion is not an exact match for the input.
-    // This ensures the dropdown closes after a selection is made.
-    const showSuggestions = 
-        value.length > 0 && 
-        suggestions.length > 0 && 
-        (suggestions.length > 1 || suggestions[0].toLowerCase() !== value.toLowerCase());
-
-    return (
-        <div className="relative w-full">
-        <input
-            type="text"
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            placeholder={placeholder}
-            className="w-full p-3 pl-10 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-        />
-        <LocationIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-        {showSuggestions && (
-            <ul className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg shadow-lg max-h-48 overflow-y-auto">
-            {suggestions.map(stop => (
-                <li key={stop}
-                onClick={() => { setValue(stop); }}
-                className="px-4 py-2 cursor-pointer hover:bg-orange-100 dark:hover:bg-gray-700">
-                {stop}
-                </li>
-            ))}
-            </ul>
-        )}
-        </div>
-    );
-};
+import { LocationIcon } from './icons/LocationIcon';
 
 const RoutePlanner: React.FC = () => {
   const [from, setFrom] = useState('');
@@ -71,14 +32,38 @@ const RoutePlanner: React.FC = () => {
     return ALL_STOPS.filter(stop => stop.toLowerCase().includes(to.toLowerCase())).slice(0, 5);
   }, [to]);
 
+  const AutocompleteInput = ({ value, setValue, suggestions, placeholder }: { value: string, setValue: (val: string) => void, suggestions: string[], placeholder: string }) => (
+    <div className="relative w-full">
+      <input
+        type="text"
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        placeholder={placeholder}
+        className="w-full p-3 pl-10 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+      />
+      <LocationIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+      {suggestions.length > 0 && value.length > 0 && (
+        <ul className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+          {suggestions.map(stop => (
+            <li key={stop}
+              onClick={() => { setValue(stop); }}
+              className="px-4 py-2 cursor-pointer hover:bg-orange-100 dark:hover:bg-gray-700">
+              {stop}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+
   return (
     <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg w-full max-w-4xl mx-auto animate-fade-in">
       <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">Find Your Route</h2>
       <p className="text-gray-500 dark:text-gray-400 mb-6">Enter your start and end points to find the best bus route.</p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        <AutocompleteInput value={from} setValue={setFrom} suggestions={fromSuggestions} placeholder="From: e.g., Railway Station" />
-        <AutocompleteInput value={to} setValue={setTo} suggestions={toSuggestions} placeholder="To: e.g., Sarabha Nagar" />
+        <AutocompleteInput value={from} setValue={setFrom} suggestions={fromSuggestions} placeholder="From: e.g., Kalma Chowk" />
+        <AutocompleteInput value={to} setValue={setTo} suggestions={toSuggestions} placeholder="To: e.g., Azadi Chowk" />
       </div>
 
       <button
@@ -96,7 +81,7 @@ const RoutePlanner: React.FC = () => {
         )}
         {results && results.length > 0 && (
           <div className="space-y-4">
-            <h3 className="text-xl font-semibold dark:text-white">Available Routes</h3>
+            <h3 className="text-xl font-semibold">Available Routes</h3>
             {results.map(route => <RouteResultCard key={route.id} route={route} />)}
           </div>
         )}
