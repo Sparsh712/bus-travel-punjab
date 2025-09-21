@@ -2,7 +2,7 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { ROUTES } from '../constants';
 import type { Route } from '../types';
 
-const apiKey = import.meta.env.VITE_API_KEY;
+const apiKey = "AIzaSyCqdkejgWQ088nNDLY2ae1lKk9woHVeyWc";
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
 
 const responseSchema = {
