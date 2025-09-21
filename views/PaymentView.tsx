@@ -16,7 +16,7 @@ const PaymentView: React.FC<PaymentViewProps> = ({ onBack, selectedSeatsCount })
   return (
     <div className="max-w-md mx-auto space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-3xl font-bold text-gray-800">{t.paymentPortal}</h2>
+        <h2 className="text-3xl font-bold text-orange-400">{t.paymentPortal}</h2>
         <button onClick={onBack} className="text-lg text-blue-600 hover:underline">&larr; {t.back}</button>
       </div>
 
