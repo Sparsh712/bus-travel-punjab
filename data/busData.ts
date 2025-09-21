@@ -18,7 +18,7 @@ export const busData: BusTrip[] = [
   {
     id: 'bus-002',
     vehicle_id: 'LHR-B-456',
-    route: 'Railway Station to DHA',
+    route: 'Railway Station to Y-Block Market',
     bus_type: 'Non-AC',
     on_time: false,
     capacity: 40,
