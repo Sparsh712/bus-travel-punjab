@@ -280,7 +280,7 @@ const ChatAssistant: React.FC = () => {
     return (
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg w-full max-w-4xl mx-auto flex flex-col h-[75vh] animate-fade-in">
             <div className="p-4 border-b dark:border-orange-400 flex justify-between items-center">
-                <h2 className="text-xl font-bold text-center flex-1 text-orange-500">AI Travel Assistant</h2>
+                <h2 className="text-xl font-bold text-center flex-1 text-orange-400">AI Travel Assistant</h2>
             </div>
             <div className="flex-1 p-6 space-y-6 overflow-y-auto">
                 {messages.map((msg, index) => <MessageBubble key={index} msg={msg} />)}
