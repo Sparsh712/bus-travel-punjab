@@ -33,7 +33,7 @@ export const ROUTES: Route[] = [
       { name: 'Hanjarwal' },
       { name: 'Chauburji' },
       { name: 'Anarkali', isMajor: true },
-      { name: 'Lahore Railway Station', isMajor: true },
+      { name: 'Railway Station', isMajor: true },
       { name: 'UET' },
       { name: 'Baghbanpura' },
       { name: 'Dera Gujran', isMajor: true },

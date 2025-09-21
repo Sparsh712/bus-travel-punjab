@@ -1,9 +1,16 @@
-
 import React, { useState, useMemo } from 'react';
-import { ROUTES, ALL_STOPS } from '../constants';
-import type { Route } from '../types';
+import type { Route, BusTrip } from '../types'; // Make sure your types file exports both
 import { RouteResultCard } from './RouteResultCard';
-import { LocationIcon } from './icons/LocationIcon';
+import { busData } from '../data/busData';
+import { ALL_STOPS } from '../constants'; // This should contain all possible stop names
+
+// --- ICONS & HELPER COMPONENTS ---
+
+const LocationIcon = ({ className }: { className?: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className={className || "w-5 h-5"}>
+        <path fillRule="evenodd" d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.14c.186-.1.4-.223.654-.369.395-.226.86-.52 1.358-.863.564-.406 1.258-1.015 1.94-1.765C15.53 14.945 16 13.825 16 12.5a6 6 0 10-12 0c0 1.325.47 2.445 1.157 3.328.682.75 1.376 1.36 1.94 1.765.498.343.963.637 1.358.863.254.146.468.27.654.369a5.741 5.741 0 00.281.14l.018.008.006.003zM10 8.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" clipRule="evenodd" />
+    </svg>
+);
 
 const SwapIcon = ({ className }: { className?: string }) => (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className || "w-6 h-6"}>
@@ -36,7 +43,7 @@ const AutocompleteInput = ({ value, setValue, suggestions, placeholder }: { valu
                     if (!showSuggestions) setShowSuggestions(true);
                 }}
                 onFocus={() => setShowSuggestions(true)}
-                onBlur={() => setTimeout(() => setShowSuggestions(false), 150)} // Delay allows click event to register
+                onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
                 placeholder={placeholder}
                 className="w-full p-3 pl-10 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                 autoComplete="off"
@@ -46,7 +53,7 @@ const AutocompleteInput = ({ value, setValue, suggestions, placeholder }: { valu
                 <ul className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg shadow-lg max-h-48 overflow-y-auto">
                     {suggestions.map(stop => (
                         <li key={stop}
-                            onMouseDown={() => handleSelect(stop)} // Use onMouseDown to prevent blur from firing first
+                            onMouseDown={() => handleSelect(stop)}
                             className="px-4 py-2 cursor-pointer hover:bg-orange-100 dark:hover:bg-gray-700">
                             {stop}
                         </li>
@@ -57,6 +64,31 @@ const AutocompleteInput = ({ value, setValue, suggestions, placeholder }: { valu
     );
 };
 
+// --- ADAPTER FUNCTION TO CONVERT DATA ---
+
+const adaptBusDataToRoutes = (data: BusTrip[]): Route[] => {
+    return data.map(trip => {
+        const lastStop = trip.stops[trip.stops.length - 1];
+        return {
+            id: trip.id,
+            busNumber: trip.vehicle_id,
+            name: trip.route,
+            stops: trip.stops.map(stop => ({
+                name: stop.stop_name,
+                isMajor: false,
+                eta: stop.eta, // <-- ADD THIS LINE
+            })),
+            estimatedTime: lastStop ? lastStop.eta : 0,
+            estimatedFare: 30,
+        };
+    });
+};
+
+// --- DATA INITIALIZATION ---
+
+const ROUTES: Route[] = adaptBusDataToRoutes(busData);
+
+// --- MAIN COMPONENT ---
 
 const RoutePlanner: React.FC = () => {
     const [from, setFrom] = useState('');
@@ -65,21 +97,29 @@ const RoutePlanner: React.FC = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     const handleSearch = () => {
-        if (!from || !to) {
+        const fromVal = from.trim().toLowerCase();
+        const toVal = to.trim().toLowerCase();
+
+        if (!fromVal || !toVal) {
             setResults([]);
             return;
         }
+
         setIsLoading(true);
         setTimeout(() => {
             const filteredRoutes = ROUTES.filter(route => {
-                const stops = route.stops.map(s => s.name.toLowerCase());
-                const fromIndex = stops.indexOf(from.toLowerCase());
-                const toIndex = stops.indexOf(to.toLowerCase());
+                const stops = route.stops.map(s => (s.name || '').trim().toLowerCase());
+                
+                // Use findIndex with 'includes' for partial matching
+                const fromIndex = stops.findIndex(stop => stop.includes(fromVal));
+                const toIndex = stops.findIndex(stop => stop.includes(toVal));
+
                 return fromIndex > -1 && toIndex > -1 && fromIndex < toIndex;
             });
+
             setResults(filteredRoutes);
             setIsLoading(false);
-        }, 500);
+        }, 300);
     };
     
     const handleSwap = () => {
@@ -105,47 +145,31 @@ const RoutePlanner: React.FC = () => {
             <p className="text-gray-500 dark:text-gray-400 mb-6">Enter your start and end points to find the best bus route.</p>
 
             <div className="flex flex-col md:flex-row items-center gap-2 mb-6">
-                <div className="w-full flex-1">
-                    <AutocompleteInput value={from} setValue={setFrom} suggestions={fromSuggestions} placeholder="From: e.g., Kalma Chowk" />
-                </div>
-                <button
-                    onClick={handleSwap}
-                    className="p-2 rounded-full text-gray-500 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-transform duration-200 ease-in-out hover:scale-110"
-                    aria-label="Swap locations"
-                >
-                    <SwapIcon className="w-5 h-5 md:rotate-0 rotate-90" />
+                <AutocompleteInput value={from} setValue={setFrom} suggestions={fromSuggestions} placeholder="From" />
+                <button onClick={handleSwap} aria-label="swap" className="p-2 rounded-md bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600">
+                    <SwapIcon className="w-5 h-5 text-gray-600 dark:text-gray-300"/>
                 </button>
-                <div className="w-full flex-1">
-                    <AutocompleteInput value={to} setValue={setTo} suggestions={toSuggestions} placeholder="To: e.g., Azadi Chowk" />
-                </div>
+                <AutocompleteInput value={to} setValue={setTo} suggestions={toSuggestions} placeholder="To" />
+                <button 
+                    onClick={handleSearch} 
+                    className="w-full md:w-auto mt-2 md:mt-0 flex justify-center items-center px-6 py-3 bg-orange-500 text-white font-semibold rounded-lg shadow-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-opacity-75 transition-all"
+                    disabled={isLoading}
+                >
+                    {isLoading ? <SpinnerIcon /> : 'Search'}
+                </button>
             </div>
 
-            <button
-                onClick={handleSearch}
-                disabled={isLoading || !from || !to}
-                className="w-full bg-orange-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-orange-700 transition-transform transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-orange-300 shadow-md flex items-center justify-center disabled:bg-orange-400 disabled:scale-100 disabled:cursor-not-allowed"
-            >
-                {isLoading ? <SpinnerIcon /> : 'Search Routes'}
-            </button>
-
-            <div className="mt-8">
-                {results === null && (
-                    <div className="text-center text-gray-500 dark:text-gray-400">
-                        <p>Your journey plan will appear here.</p>
-                    </div>
-                )}
-                {results && results.length > 0 && (
-                    <div className="space-y-4">
-                        <h3 className="text-xl font-semibold dark:text-white">Available Routes</h3>
-                        {results.map(route => <RouteResultCard key={route.id} route={route} />)}
-                    </div>
-                )}
-                {results && results.length === 0 && (
-                    <div className="text-center text-gray-500 dark:text-gray-400 p-8 border-2 border-dashed rounded-lg">
-                        <p className="font-semibold">No direct routes found.</p>
-                        <p>Try checking your spelling or select different stops.</p>
-                    </div>
-                )}
+            <div className="space-y-3">
+                {results === null && <p className="text-center text-gray-500">Enter your locations to begin your search.</p>}
+                {results && results.length === 0 && <p className="text-center text-gray-500">No direct routes found for your search.</p>}
+                {results && results.map((route, idx) => (
+                    <RouteResultCard 
+                        key={`${route.id}-${idx}`} 
+                        route={route} 
+                        from={from}
+                        to={to}
+                    />
+                ))}
             </div>
         </div>
     );
